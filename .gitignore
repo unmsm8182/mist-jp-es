@@ -219,6 +219,8 @@ __marimo__/
 
 # MDs
 *.md
+!README.md
+!corpus/README.md
 *.txt
 
 *.jsonl
