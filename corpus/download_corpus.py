@@ -1,28 +1,50 @@
 """
-Download the OpenSubtitles es-ja corpus from OPUS.
+Download the OpenSubtitles es-ja corpus via the OPUS API.
 
-Source: https://opus.nlpl.eu/opusapi
-File:   https://object.pouta.csc.fi/OPUS-OpenSubtitles/v2016/tmx/es-ja.tmx.gz
+API docs: https://opus.nlpl.eu/opusapi
+Corpus:   OpenSubtitles v2016, language pair es-ja, TMX format
 
-Run from the corpus/ directory:
+Run from the corpus/ directory (inside the venv):
     python download_corpus.py
 """
 
 import gzip
 import shutil
-import urllib.request
 from pathlib import Path
 
-TMX_GZ_URL = "https://object.pouta.csc.fi/OPUS-OpenSubtitles/v2016/tmx/es-ja.tmx.gz"
+import requests
+
+OPUS_API = "https://opus.nlpl.eu/opusapi"
+CORPUS   = "OpenSubtitles"
+VERSION  = "v2016"
+SRC      = "es"
+TGT      = "ja"
+
 DATA_DIR = Path(__file__).parent / "data"
-GZ_PATH = DATA_DIR / "es-ja.tmx.gz"
+GZ_PATH  = DATA_DIR / "es-ja.tmx.gz"
 TMX_PATH = DATA_DIR / "es-ja.tmx"
 
 
-def _progress(count, block_size, total):
-    if total > 0:
-        pct = min(count * block_size / total * 100, 100)
-        print(f"\r  {pct:.1f}%", end="", flush=True)
+def get_download_url() -> str:
+    params = {
+        "corpus": CORPUS,
+        "version": VERSION,
+        "source": SRC,
+        "target": TGT,
+        "preprocessing": "tmx",
+    }
+    print(f"Querying OPUS API: {OPUS_API}")
+    resp = requests.get(OPUS_API, params=params, timeout=30)
+    resp.raise_for_status()
+    data = resp.json()
+
+    corpora = data.get("corpora", [])
+    if not corpora:
+        raise RuntimeError(f"No results from OPUS API: {data}")
+    url = corpora[0].get("url") or corpora[0].get("download")
+    if not url:
+        raise RuntimeError(f"No download URL in OPUS API response: {corpora[0]}")
+    return url
 
 
 def download():
@@ -32,8 +54,19 @@ def download():
         print(f"Already exists: {TMX_PATH}")
         return
 
-    print(f"Downloading {TMX_GZ_URL} ...")
-    urllib.request.urlretrieve(TMX_GZ_URL, GZ_PATH, reporthook=_progress)
+    url = get_download_url()
+    print(f"Downloading: {url}")
+    with requests.get(url, stream=True, timeout=300) as r:
+        r.raise_for_status()
+        total = int(r.headers.get("content-length", 0))
+        downloaded = 0
+        with open(GZ_PATH, "wb") as f:
+            for chunk in r.iter_content(chunk_size=1 << 20):
+                f.write(chunk)
+                downloaded += len(chunk)
+                if total:
+                    pct = downloaded / total * 100
+                    print(f"\r  {pct:.1f}%  ({downloaded // 1_000_000} MB)", end="", flush=True)
     print()
 
     print(f"Decompressing → {TMX_PATH} ...")
