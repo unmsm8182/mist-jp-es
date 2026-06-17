@@ -1,0 +1,80 @@
+{
+  "corpus": {
+    "total_documents": 1832,
+    "total_pairs_read": 1314860,
+    "total_pairs_kept": 1312338,
+    "total_pairs_dropped": 2522,
+    "drop_rate_pct": 0.19
+  },
+  "contextual": {
+    "total_examples": 1312338,
+    "with_particle": 241780,
+    "without_particle": 1070558,
+    "particle_pct": 18.42,
+    "window_size": 2,
+    "separator": "[SEP]"
+  },
+  "particle_frequency": {
+    "よ": 70605,
+    "んだ": 35639,
+    "ね": 34707,
+    "な": 34439,
+    "ぞ": 15454,
+    "が": 14544,
+    "さ": 7730,
+    "だろう": 6141,
+    "けど": 4583,
+    "かな": 4331,
+    "んです": 3281,
+    "ぜ": 3192,
+    "でしょう": 3037,
+    "のだ": 2941,
+    "よね": 2490,
+    "かしら": 1835,
+    "のです": 1512,
+    "じゃないか": 1363,
+    "のかな": 553,
+    "でしょうか": 435,
+    "だろうか": 273,
+    "けれど": 61,
+    "けれども": 8
+  },
+  "document_size_distribution": {
+    "1-10": 0,
+    "11-50": 9,
+    "51-200": 56,
+    "201-500": 335,
+    "500+": 1432
+  },
+  "length_distribution_es": {
+    "min": 2,
+    "p25": 20,
+    "p50": 31,
+    "p75": 48,
+    "p95": 87,
+    "max": 451,
+    "mean": 37.4
+  },
+  "length_distribution_ja": {
+    "min": 2,
+    "p25": 8,
+    "p50": 12,
+    "p75": 18,
+    "p95": 32,
+    "max": 252,
+    "mean": 14.1
+  },
+  "validation": {
+    "base_total_errors": 0,
+    "contextual_total_errors": 0
+  },
+  "output_files": {
+    "dataset_base_mb": 316.8,
+    "dataset_contextual_mb": 615.4,
+    "dataset_particles_mb": 115.0
+  },
+  "timing": {
+    "stage1_elapsed_s": 23.8,
+    "stage2_elapsed_s": 21.5
+  }
+}

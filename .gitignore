@@ -220,3 +220,5 @@ __marimo__/
 # MDs
 *.md
 *.txt
+
+*.jsonl
