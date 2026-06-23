@@ -34,12 +34,12 @@ OPUS API
 [2] script_02_process.py        → corpus_es_ja.jsonl  (extracción básica)
    │
    ▼
-[3] script_03_pipeline.ipynb    → dataset_base.jsonl
-   │                               dataset_contextual.jsonl
-   │                               dataset_particles.jsonl
+[3] script_03_pipeline.ipynb    → corpus_base.jsonl
+   │                               corpus_contextual.jsonl
+   │                               corpus_filtered.jsonl
    ▼
 [4] script_04_annotate.ipynb    → pilot_annotations.json
-    run_annotation_pipeline.py  → dataset_annotated.jsonl
+    run_annotation_pipeline.py  → corpus_annotated.jsonl
 ```
 
 ---
@@ -86,7 +86,7 @@ Genera: `data/processed/corpus_es_ja.jsonl`
 
 Ejecuta las dos etapas del pipeline:
 
-- **Etapa 1 — Extracción + filtro:** produce `dataset_base.jsonl` (~1.3 M pares limpios)
+- **Etapa 1 — Extracción + filtro:** produce `corpus_base.jsonl` (~1.3 M pares limpios)
 - **Etapa 2 — Enriquecimiento contextual:** añade ventana de contexto y detecta partículas japonesas pragmáticas (よ, ね, んだ…)
 
 Abre y ejecuta el notebook:
@@ -98,9 +98,9 @@ jupyter notebook script_03_pipeline.ipynb
 Genera en `data/processed/`:
 | Archivo | Descripción |
 |---|---|
-| `dataset_base.jsonl` | Pares limpios sin contexto (316 MB) |
-| `dataset_contextual.jsonl` | Pares con ventana de contexto `[SEP]` (615 MB) |
-| `dataset_particles.jsonl` | Solo pares con partícula detectada (115 MB) |
+| `corpus_base.jsonl` | Pares limpios sin contexto (316 MB) |
+| `corpus_contextual.jsonl` | Pares con ventana de contexto `[SEP]` (615 MB) |
+| `corpus_filtered.jsonl` | Solo pares con partícula detectada (115 MB) |
 | `pipeline_report.json` | Estadísticas de todo el pipeline |
 
 ---
@@ -132,7 +132,7 @@ Genera en `data/processed/`:
 |---|---|
 | `pilot_sample.json` | Muestra estratificada del piloto |
 | `pilot_annotations.json` | Anotaciones del piloto para revisión manual |
-| `dataset_annotated.jsonl` | Dataset completo anotado |
+| `corpus_annotated.jsonl` | corpus completo anotado |
 
 ---
 

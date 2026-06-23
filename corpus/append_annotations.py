@@ -2,8 +2,8 @@ import json
 import sys
 from pathlib import Path
 
-INPUT_PATH = Path("data/processed/dataset_sample.jsonl")
-OUTPUT_PATH = Path("data/processed/dataset_annotated.jsonl")
+INPUT_PATH = Path("data/processed/corpus_sample.jsonl")
+OUTPUT_PATH = Path("data/processed/corpus_annotated.jsonl")
 
 def make_key(rec):
     return f"{rec.get('document_id')}::{rec.get('target_sequence')}"
@@ -60,7 +60,7 @@ def main():
                 continue
                 
             if key not in records_by_key:
-                print(f"Error: clave {key} no encontrada en el dataset original.")
+                print(f"Error: clave {key} no encontrada en el corpus original.")
                 continue
                 
             orig = records_by_key[key]

@@ -8,8 +8,8 @@ from typing import Optional, Literal
 import pydantic
 from google.antigravity import Agent, LocalAgentConfig
 
-INPUT_PATH  = Path("data/processed/dataset_sample.jsonl")
-OUTPUT_PATH = Path("data/processed/dataset_annotated.jsonl")
+INPUT_PATH  = Path("data/processed/corpus_sample.jsonl")
+OUTPUT_PATH = Path("data/processed/corpus_annotated.jsonl")
 
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 MODEL_NAME     = "gemini-3.5-flash"

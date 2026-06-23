@@ -69,9 +69,9 @@
     "contextual_total_errors": 0
   },
   "output_files": {
-    "dataset_base_mb": 316.8,
-    "dataset_contextual_mb": 615.4,
-    "dataset_particles_mb": 115.0
+    "corpus_base_mb": 316.8,
+    "corpus_contextual_mb": 615.4,
+    "corpus_filtered_mb": 115.0
   },
   "timing": {
     "stage1_elapsed_s": 23.8,
