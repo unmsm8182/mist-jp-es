@@ -231,4 +231,4 @@ corpus/data/*.xml
 corpus/data/*.gz
 corpus/data/*.txt
 
-.DS_Store
+.DS_Storescripts/results_*

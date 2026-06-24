@@ -130,13 +130,14 @@ class Translator:
             raise ValueError("El tono no puede estar vacío")
         
         try:
-            # Construir input enriquecido con señales pragmáticas
-            enriched_input = f"[INTENT:{intent}][TONE:{tone}] {text}"
+            # Como el modelo Helsinki-NLP base no ha sido fine-tuneado para procesar
+            # tokens especiales como [INTENT] o [TONE], inyectarlos crudos en el string
+            # causa que el modelo se confunda y "alucine" palabras como (Risas) o (Aplausos).
+            # Para este pipeline, el MT model traduce el texto limpio, y las señales
+            # pragmáticas se adjuntan como metadatos para la UI.
             
-            logger.debug(f"Input enriquecido: {enriched_input}")
-            
-            # Tokenizar el input enriquecido
-            inputs = self.tokenizer(enriched_input, return_tensors="pt", padding=True)
+            # Tokenizar el texto limpio
+            inputs = self.tokenizer(text, return_tensors="pt", padding=True)
             
             # Generar traducción
             outputs = self.model.generate(**inputs)
@@ -144,7 +145,7 @@ class Translator:
             # Decodificar resultado
             translation = self.tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
             
-            logger.debug(f"Traducción con señales completada: {enriched_input[:60]}... → {translation[:50]}...")
+            logger.debug(f"Traducción completada: {text[:60]}... → {translation[:50]}...")
             return translation
             
         except Exception as e:

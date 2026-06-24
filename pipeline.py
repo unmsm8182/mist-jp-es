@@ -61,54 +61,39 @@ class MISTPipeline:
             logger.error(f"Error inicializando pipeline: {e}")
             raise RuntimeError(f"Error inicializando MISTPipeline: {e}")
     
-    def run(self, japanese_text: str) -> Dict[str, Any]:
+    def run(self, japanese_text: str, context_text: str = "") -> Dict[str, Any]:
         """
         Ejecuta el pipeline completo sobre un texto japonés.
         
         Realiza las siguientes operaciones en secuencia:
-        1. Clasifica la intención del texto
-        2. Clasifica el tono emocional del texto
-        3. Genera traducción estándar (sin señales)
-        4. Construye input enriquecido con señales pragmáticas
-        5. Genera traducción con señales pragmáticas
+        1. Construye el string de clasificación usando context_text [SEP] japanese_text
+        2. Clasifica la intención y el tono
+        3. Genera traducción estándar (baseline)
+        4. Genera traducción con señales pragmáticas (MIST)
         
         Args:
             japanese_text (str): Texto en japonés a procesar
+            context_text (str): Contexto opcional previo a la oración
             
         Returns:
-            Dict[str, Any]: Diccionario con estructura:
-                {
-                    "input": str (texto original),
-                    "intent": {
-                        "label": str,
-                        "confidence": float
-                    },
-                    "tone": {
-                        "label": str,
-                        "confidence": float
-                    },
-                    "enriched_input": str (input con señales),
-                    "baseline_translation": str (sin señales),
-                    "mist_translation": str (con señales)
-                }
-                
-        Raises:
-            ValueError: Si el texto está vacío
-            RuntimeError: Si hay error en alguna etapa del pipeline
+            Dict[str, Any]
         """
         if not japanese_text or not japanese_text.strip():
             raise ValueError("El texto japonés no puede estar vacío")
         
         try:
-            logger.info(f"Ejecutando pipeline para: {japanese_text}")
+            logger.info(f"Ejecutando pipeline para: {japanese_text} | Contexto: {context_text}")
+            
+            # String para clasificadores (Contexto + SEP + Texto Actual)
+            classifier_input = f"{context_text} [SEP] {japanese_text}" if context_text else japanese_text
             
             # Etapa 1: Clasificar intención
             logger.debug("Clasificando intención...")
-            intent_result = self.intent_classifier.predict(japanese_text)
+            intent_result = self.intent_classifier.predict(classifier_input)
             
             # Etapa 2: Clasificar tono
             logger.debug("Clasificando tono...")
-            tone_result = self.tone_classifier.predict(japanese_text)
+            tone_result = self.tone_classifier.predict(classifier_input)
             
             # Etapa 3: Traducción estándar (baseline)
             logger.debug("Generando traducción baseline...")
@@ -132,6 +117,7 @@ class MISTPipeline:
             # Construir resultado final
             result = {
                 "input": japanese_text,
+                "context": context_text,
                 "intent": intent_result,
                 "tone": tone_result,
                 "enriched_input": enriched_input,

@@ -23,8 +23,8 @@ TONE_LABELS = [
 
 # Model Identifiers
 TRANSLATION_MODEL = "Helsinki-NLP/opus-mt-ja-es"
-INTENT_MODEL = "cl-tohoku/bert-base-japanese"
-TONE_MODEL = "cl-tohoku/bert-base-japanese"
+INTENT_MODEL = "models/intent_model"
+TONE_MODEL = "models/tone_model"
 
 # Demo Sentences - Oraciones en Japonés para Demostración
 DEMO_SENTENCES = [
